@@ -1,0 +1,60 @@
+package eu.zLike.comandos;
+
+import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+
+public class Chat implements CommandExecutor, Listener {
+	public static boolean chat = true;
+
+	@Override
+	public boolean onCommand(CommandSender sender, Command cmd, String comando, String[] args) {
+		if (!(sender instanceof Player)) {
+			sender.sendMessage("Voce nao eh um player!");
+			return true;
+		}
+		Player p = (Player) sender;
+		if (!p.hasPermission("times.chat")) {
+			p.sendMessage("Voce nao tem perm :P");
+			return true;
+		}
+		if (comando.equalsIgnoreCase("chat")) {
+			if (args.length != 1) {
+				p.sendMessage("Erro de digito! Tente /chat (on/of/clear)");
+				return true;
+			} else {
+				if (args[0].equalsIgnoreCase("clear")) {
+					for (int i = 1; i < 500; i++) {
+						Bukkit.broadcastMessage("  ");
+					}
+					Bukkit.broadcastMessage("Chat limpo por: " + p.getName());
+				}
+				if (args[0].equalsIgnoreCase("on")) {
+					chat = true;
+					p.sendMessage("Chat esta ativo agora!");
+				}
+				if (args[0].equalsIgnoreCase("off")) {
+					chat = false;
+					Bukkit.broadcastMessage("O chat foi desativado!");
+					p.sendMessage("Chat esta desativado agora!");
+				}
+			}
+		}
+		return false;
+	}
+
+	@EventHandler
+	public void aoFalar(AsyncPlayerChatEvent e) {
+		if (chat == true) {
+			e.setCancelled(false);
+		} else {
+			e.setCancelled(true);
+
+		}
+	}
+}
