@@ -1,0 +1,22 @@
+package eu.zLike.Evts;
+
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
+
+import eu.zLike.ArraysDeKits;
+
+public class Dano implements Listener {
+
+	@EventHandler
+	public void danoKit(EntityDamageEvent e) {
+		Player p = (Player) e.getEntity();
+		if(!ArraysDeKits.ab.contains(p)){
+			e.setCancelled(true);
+		}else{
+			e.setCancelled(false);
+		}
+	}
+
+}
